@@ -1,5 +1,6 @@
 <?php
 use Phalcon\Loader;
+use Phalcon\Mvc\Router;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\Application;
 use Phalcon\Di\FactoryDefault;
@@ -10,6 +11,7 @@ try {
 
 //define a public path and APP _PATH
 define('_PUBLIC','/public');
+
 define('APP_PATH', realpath('..') . '/');	
 $loader = new Loader();
 $loader->registerDirs([
@@ -28,6 +30,19 @@ return new DbAdapter([
 "dbname" => "shopcz"
 ]);
 });
+
+$di->set('router', function () {  
+   $router = new \Phalcon\Mvc\Router();  
+    $router->add('/:controller/:action/([0-9]{4})/:params', array(  
+        'controller' => 1,  
+        'action' => 2,  
+        'id' => 3, 
+        'params'=>4, 
+    ));  
+    return $router;  
+});  
+
+
 
 // Setup the view component
 $di->set('view', function () {

@@ -15,11 +15,20 @@ class LoginController extends Phalcon\Mvc\Controller{
 		);
 		$admin = new cz_admin();
 		$result=$admin->check($data);
-		
+		// var_dump($result);
 		if (count($result)){
-			echo "2";
+			$this->dispatcher->forward(array(
+			"controller" => "admin",
+			"action" => "index")
+		);
+
 		}else{
-			echo "3";
+			$this->dispatcher->forward(array(
+			"controller" => "error",
+			"action" => "index",			
+			)
+		);
+
 		}
 	}	
 	
