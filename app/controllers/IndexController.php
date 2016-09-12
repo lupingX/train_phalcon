@@ -1,11 +1,10 @@
 <?php
-class IndexController extends Phalcon\Mvc\Controller{
 
+class IndexController extends ControllerBase{
+//set the homepage
 	public function IndexAction(){
-		$this->dispatcher->forward(array(
-			"controller" => "login",
-			"action" => "login")
-		);
+		$this->initialize();
+		
 
 	}
 }

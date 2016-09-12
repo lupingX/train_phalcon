@@ -47,8 +47,9 @@
           <td width="24%" align="center">
             <!-- <a href="category.php?act=move&amp;cat_id=1">转移商品</a> | -->
            
-            <a href="/category/cat_edit/<?=$cat['cat_id']?>/">编辑</a> |
-            <a href="/category/cat_delete/<?=$cat['cat_id']?>">移除</a>
+
+            <a href="/category/cat_edit/id:<?=$cat['cat_id']?>/">编辑</a> |
+            <a href="/category/cat_delete/id:<?=$cat['cat_id']?>">移除</a>
           </td>
         </tr>
       <?php  endforeach; ?>

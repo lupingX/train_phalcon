@@ -6,6 +6,10 @@ use Phalcon\Mvc\Application;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\Url as UrlProvider;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
+use Phalcon\Dispatcher;
+use Phalcon\Mvc\Dispatcher as MvcDispatcher;
+use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Session\Adapter\Files as Session;
 try {
 // Register an autoloader
 
@@ -31,16 +35,35 @@ return new DbAdapter([
 ]);
 });
 
-$di->set('router', function () {  
-   $router = new \Phalcon\Mvc\Router();  
-    $router->add('/:controller/:action/([0-9]{4})/:params', array(  
-        'controller' => 1,  
-        'action' => 2,  
-        'id' => 3, 
-        'params'=>4, 
-    ));  
-    return $router;  
-});  
+
+//preparing parameters:
+$di->set('dispatcher', function () {
+// Create an EventsManager
+$eventsManager = new EventsManager();
+// Attach a listener
+$eventsManager->attach("dispatch:beforeDispatchLoop", function ($event, $dispatcher) {
+$keyParams = array();
+$params = $dispatcher->getParams();
+// Explode each parameter as key,value pairs
+foreach ($params as $number => $value) {
+$parts = explode(':', $value);
+$keyParams[$parts[0]] = $parts[1];
+}
+// Override parameters
+$dispatcher->setParams($keyParams);
+});
+$dispatcher = new MvcDispatcher();
+$dispatcher->setEventsManager($eventsManager);
+return $dispatcher;
+});
+
+
+//start session
+$di->setShared('session', function () {
+$session = new Session();
+$session->start();
+return $session;
+});
 
 
 
